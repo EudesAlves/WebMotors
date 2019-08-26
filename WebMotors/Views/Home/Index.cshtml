@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		// Chamada ao WebService WebMotors - Make
+		$.ajax({
+			url: 'http://desafioonline.webmotors.com.br/api/OnlineChallenge/Make',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				console.log(response);
+
+				var ddlMake = $("#ddlMake");
+				PopularDropDown(response, ddlMake);
+			}
+		});
+
+		// Evento Change para DropDownMake
+		$("#ddlMake").change(function () {
+			var valor = this.value;
+			var texto = this.options[this.selectedIndex].text;
+
+			console.log(valor + ' ' + texto);
+			if (valor > 0) {
+				ObterModel(valor);
+			}
+			$("#ddlVersion").children().remove().end().append('<option value="0">Selecione</option>');
+		});
+
+		function PopularDropDown(response, dropDown) {
+			dropDown.children().remove().end().append('<option value="0">Selecione</option>');
+
+			$(response).each(function () {
+				var option = $("<option />");
+				option.html(this.Name);
+				option.val(this.ID);
+
+				dropDown.append(option);
+			});
+		}
+
+		// Chamada ao WebService WebMotors - Model
+		function ObterModel(valor) {
+			$.ajax({
+				url: 'http://desafioonline.webmotors.com.br/api/OnlineChallenge/Model?MakeID=' + valor,
+				type: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					console.log(response);
+
+					var ddlModel = $("#ddlModel");
+					PopularDropDown(response, ddlModel);
+				}
+			});
+		}
+
+		// Evento Change para DropDownModel
+		$("#ddlModel").change(function () {
+			var valor = this.value;
+			var texto = this.options[this.selectedIndex].text;
+
+			console.log(valor + ' ' + texto);
+			if (valor > 0) {
+				ObterVersion(valor);
+			}
+		});
+
+		// Chamada ao WebService WebMotors - Version
+		function ObterVersion(valor) {
+			$.ajax({
+				url: 'http://desafioonline.webmotors.com.br/api/OnlineChallenge/Version?ModelID=' + valor,
+				type: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					console.log(response);
+
+					var ddlVersion = $("#ddlVersion");
+					PopularDropDown(response, ddlVersion);
+				}
+			});
+		}
+	});
+</script>
+
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>
+
+
+<select id="ddlMake">
+</select>
+
+<select id="ddlModel">
+	<option value="0">Selecione</option>
+</select>
+
+<select id="ddlVersion">
+	<option value="0">Selecione</option>
+</select>
