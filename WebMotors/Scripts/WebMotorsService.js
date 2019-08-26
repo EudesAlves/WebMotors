@@ -8,7 +8,7 @@
             console.log(response);
 
             var ddlMake = $("#ddlMake");
-            PopularDropDown(response, ddlMake);
+            PopularDropDownMarca(response, ddlMake);
         }
     });
 
@@ -23,25 +23,14 @@
             $("#Marca").val(texto);
         }
         else {
-            $("#Marca").value("");
+            $("#Marca").val("");
         }
         $("#ddlVersion").children().remove().end().append('<option value="0">Selecione</option>');
-        $("#Modelo").value("");
-        $("#Versao").value("");
+        $("#Modelo").val("");
+        $("#Versao").val("");
     });
 
-    function PopularDropDown(response, dropDown) {
-        dropDown.children().remove().end().append('<option value="0">Selecione</option>');
-
-        $(response).each(function () {
-            var option = $("<option />");
-            option.html(this.Name);
-            option.val(this.ID);
-
-            dropDown.append(option);
-        });
-        dropDown.selectedIndex = 0;
-    }
+    
 
     // Chamada ao WebService WebMotors - Model
     function ObterModel(valor) {
@@ -53,7 +42,7 @@
                 console.log(response);
 
                 var ddlModel = $("#ddlModel");
-                PopularDropDown(response, ddlModel);
+                PopularDropDownModel(response, ddlModel);
             }
         });
     }
@@ -69,10 +58,10 @@
             $("#Modelo").val(texto);
         }
         else {
-            $("#Modelo").value("");
+            $("#Modelo").val("");
         }
         $("#ddlVersion").children().remove().end().append('<option value="0">Selecione</option>');
-        $("#Versao").value("");
+        $("#Versao").val("");
     });
 
     // Chamada ao WebService WebMotors - Version
@@ -85,7 +74,7 @@
                 console.log(response);
 
                 var ddlVersion = $("#ddlVersion");
-                PopularDropDown(response, ddlVersion);
+                PopularDropDownVersion(response, ddlVersion);
             }
         });
     }
@@ -100,10 +89,62 @@
             $("#Versao").val(texto);
         }
         else {
-            $("#Versao").value("");
+            $("#Versao").val("");
         }
     });
-    
-    //var textoM = $("#Marca").value();
-    //$("#ddlMake option:contains(" + textoM + ")").attr('selected', 'selected');
+
+    function PopularDropDownMarca(response, dropDown) {
+        dropDown.children().remove().end().append('<option value="0">Selecione</option>');
+        $(response).each(function () {
+            var option = $("<option />");
+            option.html(this.Name);
+            option.val(this.ID);
+            dropDown.append(option);
+        });
+
+        // Selecionar DropDown
+        var textoMarca = $("#Marca").val();
+        console.log(textoMarca);
+        if (textoMarca) {
+            $("#ddlMake option:contains(" + textoMarca + ")").attr('selected', 'selected');
+            ObterModel($("#ddlMake").val());
+        }
+    }
+
+    function PopularDropDownModel(response, dropDown) {
+        dropDown.children().remove().end().append('<option value="0">Selecione</option>');
+        $(response).each(function () {
+            var option = $("<option />");
+            option.html(this.Name);
+            option.val(this.ID);
+            dropDown.append(option);
+        });
+
+        // Selecionar DropDown
+        var textoModel = $("#Modelo").val();
+        console.log(textoModel);
+        if (textoModel) {
+            $("#ddlModel option:contains(" + textoModel + ")").attr('selected', 'selected');
+            ObterVersion($("#ddlModel").val());
+        }
+    }
+
+    function PopularDropDownVersion(response, dropDown) {
+        dropDown.children().remove().end().append('<option value="0">Selecione</option>');
+        $(response).each(function () {
+            var option = $("<option />");
+            option.html(this.Name);
+            option.val(this.ID);
+            dropDown.append(option);
+        });
+
+        // Selecionar DropDown
+        var textoVersion = $("#Versao").val();
+        console.log(textoVersion);
+        if (textoVersion) {
+            $("#ddlVersion option:contains(" + textoVersion + ")").attr('selected', 'selected');
+            
+        }
+    }
+ 
 });
